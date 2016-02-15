@@ -1,5 +1,8 @@
 """Script to gather news from HackerNews."""
+from tqdm import tqdm
+
 import argparse
+import requests as req
 import sys
 
 URL_NEWS_STORIES = 'https://hacker-news.firebaseio.com/v0/newstories.json'
@@ -9,19 +12,40 @@ URL_TOP_STORIES = 'https://hacker-news.firebaseio.com/v0/topstories.json'
 URL_ITEM = 'https://hacker-news.firebaseio.com/v0/item/{}.json'
 
 
-def get_top_stories(url):
+def get_stories(url):
     """Return a list of ids of the 500 top stories."""
-    pass
+    try:
+        data = req.get(url)
+    except req.ConnectionError:
+        print('A network problem occurred.')
+    except req.Timeout:
+        print('A timeout problem occurred.')
+    except req.TooManyRedirects:
+        print('The request exceeds the configured number of maximum \
+            redirections.')
+    return data.json()
 
 
-def get_new_stories(url):
-    """Return a list of ids of the 500 new stories."""
-    pass
+def get_story(url):
+    """Return a story of the given ID."""
+    try:
+        data = req.get(url)
+    except req.ConnectionError:
+        print('A network problem occurred.')
+    except req.Timeout:
+        print('A timeout problem occurred.')
+    except req.TooManyRedirects:
+        print('The request exceeds the configured number of maximum \
+            redirections.')
+    return data.json()
 
 
-def show_stories(list_stories):
+def create_list_stories(list_id_stories, number_of_stories):
     """Show in a formatted way the stories for each item of the list."""
-    pass
+    list_stories = []
+    for new in tqdm(list_id_stories[:number_of_stories], unit='B'):
+        list_stories.append(get_story(URL_ITEM.format(new)))
+    return list_stories
 
 
 def main():
@@ -39,34 +63,52 @@ def main():
         500 stories from the list.
 
         Examples:
-        - Get Lyrics:
+        - Get Top Stories:
             $ pynews -t 10 # or
             $ pynews --top-stories 10
             This will show the 10 first top stories from the list of 500.
 
-        - Get Discography:
+        - Get New Stories:
             $ pynews -n 10 # or
             $ pynews --news-stories
             This will show the 10 first new stories from the list of 500.
 
         Get basic options and Help, use: -h\--help
 
-        """
+        """,
     )
     parser.add_argument(
         '-t',
         '--top-stories',
+        nargs='?',
+        const=499,
         type=int,
         help='Get the top N stories from HackerNews API'
     )
     parser.add_argument(
         '-n',
         '--news-stories',
+        nargs='?',
+        const=499,
         type=int,
         help='Get the N new stories from HackerNews API'
     )
     options = parser.parse_args()
-    print(options)
+    if options.top_stories:
+        list_stories = create_list_stories(
+            get_stories(URL_TOP_STORIES), options.top_stories
+        )
+
+        for story in list_stories:
+            print('{} - {}'.format(story['title'], story['url']))
+
+    elif options.news_stories:
+        list_stories = create_list_stories(
+            get_stories(URL_NEWS_STORIES), options.news_stories
+        )
+
+        for story in list_stories:
+            print('{} - {}'.format(story['title'], story['url']))
 
 if __name__ == '__main__':
     sys.exit(main())
