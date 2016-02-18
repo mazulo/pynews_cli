@@ -1,6 +1,10 @@
 """Script to gather news from HackerNews."""
 from tqdm import tqdm
 
+from new_curses_menu import NewCursesMenu
+from cursesmenu.items import FunctionItem
+from webbrowser import open as url_open
+
 import argparse
 import requests as req
 import sys
@@ -46,6 +50,18 @@ def create_list_stories(list_id_stories, number_of_stories):
     for new in tqdm(list_id_stories[:number_of_stories], unit='B'):
         list_stories.append(get_story(URL_ITEM.format(new)))
     return list_stories
+
+
+def create_menu(list_dict_stories):
+    menu = NewCursesMenu('PyNews', 'Select the new and press enter')
+    for story in list_dict_stories:
+        if 'url' in story:
+            item = FunctionItem(story['title'], url_open, args=[story['url']])
+        else:
+            msg = 'This new does not have an URL'
+            item = FunctionItem(story['title'], print, args=[msg])
+        menu.append_item(item)
+    return menu
 
 
 def main():
@@ -95,20 +111,17 @@ def main():
     )
     options = parser.parse_args()
     if options.top_stories:
-        list_stories = create_list_stories(
+        list_dict_stories = create_list_stories(
             get_stories(URL_TOP_STORIES), options.top_stories
         )
 
-        for story in list_stories:
-            print('{} - {}'.format(story['title'], story['url']))
-
     elif options.news_stories:
-        list_stories = create_list_stories(
+        list_dict_stories = create_list_stories(
             get_stories(URL_NEWS_STORIES), options.news_stories
         )
 
-        for story in list_stories:
-            print('{} - {}'.format(story['title'], story['url']))
+    menu = create_menu(list_dict_stories)
+    menu.show()
 
 if __name__ == '__main__':
     sys.exit(main())
