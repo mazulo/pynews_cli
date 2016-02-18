@@ -115,16 +115,13 @@ def main():
             get_stories(URL_TOP_STORIES), options.top_stories
         )
 
-        menu = create_menu(list_dict_stories)
-        menu.show()
-
     elif options.news_stories:
         list_dict_stories = create_list_stories(
             get_stories(URL_NEWS_STORIES), options.news_stories
         )
 
-        menu = create_menu(list_dict_stories)
-        menu.show()
+    menu = create_menu(list_dict_stories)
+    menu.show()
 
 if __name__ == '__main__':
     sys.exit(main())
