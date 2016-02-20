@@ -6,6 +6,7 @@ from cursesmenu.items import FunctionItem
 from webbrowser import open as url_open
 
 import argparse
+from concurrent.futures import as_completed, ThreadPoolExecutor
 import requests as req
 import sys
 
@@ -30,8 +31,9 @@ def get_stories(url):
     return data.json()
 
 
-def get_story(url):
+def get_story(new):
     """Return a story of the given ID."""
+    url = URL_ITEM.format(new)
     try:
         data = req.get(url)
     except req.ConnectionError:
@@ -46,9 +48,15 @@ def get_story(url):
 
 def create_list_stories(list_id_stories, number_of_stories):
     """Show in a formatted way the stories for each item of the list."""
+
     list_stories = []
-    for new in tqdm(list_id_stories[:number_of_stories], unit='B'):
-        list_stories.append(get_story(URL_ITEM.format(new)))
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        waits = {
+            executor.submit(get_story, new)
+            for new in list_id_stories[:number_of_stories]
+        }
+        for future in tqdm(as_completed(waits), unit='s'):
+            list_stories.append(future.result())
     return list_stories
 
 
