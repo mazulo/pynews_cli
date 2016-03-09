@@ -1,7 +1,7 @@
 """Script to gather news from HackerNews."""
-from tqdm import tqdm
 
-from new_curses_menu import NewCursesMenu
+from tqdm import tqdm
+from cursesmenu import CursesMenu
 from cursesmenu.items import FunctionItem
 from webbrowser import open as url_open
 
@@ -16,34 +16,33 @@ URL_TOP_STORIES = 'https://hacker-news.firebaseio.com/v0/topstories.json'
 
 URL_ITEM = 'https://hacker-news.firebaseio.com/v0/item/{}.json'
 
+URLS = {
+    'top': URL_TOP_STORIES,
+    'news': URL_NEWS_STORIES,
+    'item': URL_ITEM
+}
 
-def get_stories(url):
+
+def get_stories(type_url):
     """Return a list of ids of the 500 top stories."""
-    try:
-        data = req.get(url)
-    except req.ConnectionError:
-        print('A network problem occurred.')
-    except req.Timeout:
-        print('A timeout problem occurred.')
-    except req.TooManyRedirects:
-        print('The request exceeds the configured number of maximum \
-            redirections.')
+    data = req.get(URLS[type_url])
     return data.json()
 
 
 def get_story(new):
     """Return a story of the given ID."""
-    url = URL_ITEM.format(new)
+    url = URLS['item'].format(new)
     try:
         data = req.get(url)
     except req.ConnectionError:
-        print('A network problem occurred.')
+        raise
     except req.Timeout:
-        print('A timeout problem occurred.')
+        raise req.Timeout('A timeout problem occurred.')
     except req.TooManyRedirects:
-        print('The request exceeds the configured number of maximum \
-            redirections.')
-    return data.json()
+        raise req.TooManyRedirects('The request exceeds the configured number\
+            of maximum redirections.')
+    else:
+        return data.json()
 
 
 def create_list_stories(list_id_stories, number_of_stories):
@@ -55,13 +54,17 @@ def create_list_stories(list_id_stories, number_of_stories):
             executor.submit(get_story, new)
             for new in list_id_stories[:number_of_stories]
         }
-        for future in tqdm(as_completed(waits), unit='s'):
+        for future in tqdm(
+            as_completed(waits),
+            desc='Getting results',
+            unit=' news',
+        ):
             list_stories.append(future.result())
     return list_stories
 
 
 def create_menu(list_dict_stories):
-    menu = NewCursesMenu('PyNews', 'Select the new and press enter')
+    menu = CursesMenu('PyNews', 'Select the new and press enter')
     for story in list_dict_stories:
         if 'url' in story:
             item = FunctionItem(story['title'], url_open, args=[story['url']])
@@ -119,14 +122,27 @@ def main():
     )
     options = parser.parse_args()
     if options.top_stories:
-        list_dict_stories = create_list_stories(
-            get_stories(URL_TOP_STORIES), options.top_stories
-        )
+        param = options.top_stories, 'top'
+    else:
+        param = options.news_stories, 'news'
+    list_data = None
 
-    elif options.news_stories:
+    try:
+        list_data = get_stories(param[1])
+    except req.ConnectionError:
+        print('A connection problem occurred.')
+    except req.Timeout:
+        print('A timeout problem occurred.')
+    except req.TooManyRedirects:
+        print('The request exceeds the configured number\
+            of maximum redirections.')
+
+    if list_data is not None:
         list_dict_stories = create_list_stories(
-            get_stories(URL_NEWS_STORIES), options.news_stories
+            list_data, param[0]
         )
+    else:
+        return
 
     menu = create_menu(list_dict_stories)
     menu.show()
