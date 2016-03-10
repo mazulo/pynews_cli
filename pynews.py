@@ -86,8 +86,8 @@ def main():
         Usage: pynews [-t/--top-stories number_of_stories]
                       [-n/--news-stories number_of_stories]
 
-        If the number of stories is not supplied, will be showed all the
-        500 stories from the list.
+        If the number of stories is not supplied, will be showed 200 from the
+        500 stories.
 
         Examples:
         - Get Top Stories:
@@ -108,7 +108,7 @@ def main():
         '-t',
         '--top-stories',
         nargs='?',
-        const=499,
+        const=200,
         type=int,
         help='Get the top N stories from HackerNews API'
     )
@@ -116,7 +116,7 @@ def main():
         '-n',
         '--news-stories',
         nargs='?',
-        const=499,
+        const=200,
         type=int,
         help='Get the N new stories from HackerNews API'
     )
