@@ -5,8 +5,8 @@ from cursesmenu import CursesMenu
 from cursesmenu.items import FunctionItem
 from webbrowser import open as url_open
 
-import argparse
 from concurrent.futures import as_completed, ThreadPoolExecutor
+import argparse
 import requests as req
 import sys
 
@@ -21,6 +21,11 @@ URLS = {
     'news': URL_NEWS_STORIES,
     'item': URL_ITEM
 }
+
+
+def show(arg):
+    print(arg)
+    return
 
 
 def get_stories(type_url):
@@ -70,7 +75,7 @@ def create_menu(list_dict_stories):
             item = FunctionItem(story['title'], url_open, args=[story['url']])
         else:
             msg = 'This new does not have an URL'
-            item = FunctionItem(story['title'], print, args=[msg])
+            item = FunctionItem(story['title'], show, args=[msg])
         menu.append_item(item)
     return menu
 
