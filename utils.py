@@ -5,6 +5,8 @@ from webbrowser import open as url_open
 
 from concurrent.futures import as_completed, ThreadPoolExecutor
 import requests as req
+import random
+
 
 URL_NEWS_STORIES = 'https://hacker-news.firebaseio.com/v0/newstories.json'
 
@@ -46,7 +48,7 @@ def get_story(new):
         return data.json()
 
 
-def create_list_stories(list_id_stories, number_of_stories):
+def create_list_stories(list_id_stories, number_of_stories, shuffle):
     """Show in a formatted way the stories for each item of the list."""
 
     list_stories = []
@@ -61,6 +63,8 @@ def create_list_stories(list_id_stories, number_of_stories):
             unit=' news',
         ):
             list_stories.append(future.result())
+    if shuffle:
+        random.shuffle(list_stories)
     return list_stories
 
 

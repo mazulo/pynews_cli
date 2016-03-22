@@ -44,6 +44,7 @@ def main():
         type=int,
         help='Get the top N stories from HackerNews API'
     )
+
     parser.add_argument(
         '-n',
         '--news-stories',
@@ -52,11 +53,23 @@ def main():
         type=int,
         help='Get the N new stories from HackerNews API'
     )
+
+    parser.add_argument(
+        '-s',
+        '--shuffle',
+        nargs='?',
+        const=False,
+        type=bool,
+        help='Get the N new stories from HackerNews API'
+    )
+
     options = parser.parse_args()
+
     if options.top_stories:
         param = options.top_stories, 'top'
     else:
         param = options.news_stories, 'news'
+
     list_data = None
 
     try:
@@ -71,7 +84,9 @@ def main():
 
     if list_data is not None:
         list_dict_stories = create_list_stories(
-            list_data, param[0]
+            list_data,
+            param[0],
+            options.shuffle
         )
     else:
         return
