@@ -41,4 +41,11 @@ Usage Example
     $ pynews --news-stories
     # This will show the 10 first *new* stories from the list of 500.
 
-![example of use](http://wstaw.org/m/2016/02/16/GIFrecord_2016-02-16_014532.gif)
+See it in action
+----------------
+
+.. image:: http://wstaw.org/m/2016/02/16/GIFrecord_2016-02-16_014532.gif
+   :height: 552px
+   :width: 610px
+   :alt: Usage
+   :align: center
