@@ -41,6 +41,7 @@ def main():
         '--top-stories',
         nargs='?',
         const=200,
+        default=200,
         type=int,
         help='Get the top N stories from HackerNews API'
     )
@@ -50,6 +51,7 @@ def main():
         '--news-stories',
         nargs='?',
         const=200,
+        default=200,
         type=int,
         help='Get the N new stories from HackerNews API'
     )
