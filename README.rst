@@ -7,6 +7,8 @@ A Python CLI to browse news from Hacker News (and others, in the near future). A
 Installing
 ----------
 
+  Only works with Python 3
+
 Via pip
 
 .. code-block:: bash
