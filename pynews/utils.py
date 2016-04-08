@@ -1,11 +1,11 @@
-from tqdm import tqdm
+from concurrent.futures import as_completed, ThreadPoolExecutor
+import random
+
 from cursesmenu import CursesMenu
 from cursesmenu.items import FunctionItem
+from tqdm import tqdm
 from webbrowser import open as url_open
-
-from concurrent.futures import as_completed, ThreadPoolExecutor
 import requests as req
-import random
 
 
 URL_NEWS_STORIES = 'https://hacker-news.firebaseio.com/v0/newstories.json'
@@ -48,11 +48,13 @@ def get_story(new):
         return data.json()
 
 
-def create_list_stories(list_id_stories, number_of_stories, shuffle):
+def create_list_stories(
+    list_id_stories, number_of_stories, shuffle, max_threads
+):
     """Show in a formatted way the stories for each item of the list."""
 
     list_stories = []
-    with ThreadPoolExecutor(max_workers=8) as executor:
+    with ThreadPoolExecutor(max_workers=max_threads) as executor:
         waits = {
             executor.submit(get_story, new)
             for new in list_id_stories[:number_of_stories]
