@@ -1,0 +1,6 @@
+#!/usr/bin/ python
+
+from pynews import pynews
+
+if __name__ == '__main__':
+    pynews.main()

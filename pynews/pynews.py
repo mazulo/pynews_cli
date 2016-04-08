@@ -4,7 +4,7 @@ import argparse
 import requests as req
 import sys
 
-from utils import get_stories, create_list_stories, create_menu
+from .utils import get_stories, create_list_stories, create_menu
 
 
 def main():
@@ -41,7 +41,6 @@ def main():
         '--top-stories',
         nargs='?',
         const=200,
-        default=200,
         type=int,
         help='Get the top N stories from HackerNews API'
     )
@@ -51,7 +50,6 @@ def main():
         '--news-stories',
         nargs='?',
         const=200,
-        default=200,
         type=int,
         help='Get the N new stories from HackerNews API'
     )
