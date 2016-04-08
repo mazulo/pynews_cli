@@ -1,10 +1,14 @@
 """Script to gather news from HackerNews."""
-
 import argparse
-import requests as req
+import multiprocessing
 import sys
 
+import requests as req
+
 from .utils import get_stories, create_list_stories, create_menu
+
+
+DEFAULT_THREADS_NUMBER = multiprocessing.cpu_count()
 
 
 def main():
@@ -63,6 +67,15 @@ def main():
         help='Get the N new stories from HackerNews API'
     )
 
+    parser.add_argument(
+        '-T',
+        '--threads',
+        nargs='?',
+        const=DEFAULT_THREADS_NUMBER,
+        type=int,
+        help='Determine the number max of threads'
+    )
+
     options = parser.parse_args()
 
     if options.top_stories:
@@ -82,17 +95,23 @@ def main():
         print('The request exceeds the configured number\
             of maximum redirections.')
 
-    if list_data is not None:
-        list_dict_stories = create_list_stories(
-            list_data,
-            param[0],
-            options.shuffle
-        )
-    else:
+    if not list_data:
         return
+
+    max_threads = (
+        options.threads if options.threads > 0 else DEFAULT_THREADS_NUMBER
+    )
+
+    list_dict_stories = create_list_stories(
+        list_data,
+        param[0],
+        options.shuffle,
+        max_threads
+    )
 
     menu = create_menu(list_dict_stories, param[1])
     menu.show()
+
 
 if __name__ == '__main__':
     sys.exit(main())
