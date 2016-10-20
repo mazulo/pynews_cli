@@ -18,7 +18,7 @@ def main():
         description='Your news collector inside your terminal! Tell me, what\'s\
                       cooler than that?',
         usage="""
-        PyNews-CLI – News Collector from HackerNews API
+        PyNews-CLI - News Collector from HackerNews API
         Usage: pynews [-t/--top-stories number_of_stories]
                       [-n/--news-stories number_of_stories]
 
@@ -99,7 +99,7 @@ def main():
         return
 
     max_threads = (
-        options.threads if options.threads > 0 else DEFAULT_THREADS_NUMBER
+        options.threads if options.threads or 0 > 0 else DEFAULT_THREADS_NUMBER
     )
 
     list_dict_stories = create_list_stories(

@@ -1,3 +1,4 @@
+import sys
 from setuptools import setup, find_packages
 
 
@@ -9,9 +10,12 @@ author_name = 'Patrick Mazulo'
 author_email = 'pmazulo@gmail.com'
 dependencies = [
     'curses-menu==0.5.0',
-    'requests==2.9.1',
+    'requests==2.11.1',
     'tqdm==3.8.0',
 ]
+
+if sys.version_info.major == 2:
+    dependencies.append('futures==3.0.5')
 
 setup(
     name='PyNews',
