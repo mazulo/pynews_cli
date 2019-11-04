@@ -21,7 +21,7 @@ author_name = 'Patrick Mazulo'
 author_email = 'pmazulo@gmail.com'
 dependencies = [
     'curses-menu==0.5.0',
-    'requests==2.11.1',
+    'requests==2.20.0',
     'tqdm==3.8.0',
 ]
 
