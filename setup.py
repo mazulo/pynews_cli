@@ -8,14 +8,14 @@ description = "PyNews is a simple Python CLI to browse news from HN website"
 author_name = "Patrick Mazulo"
 author_email = "pmazulo@gmail.com"
 dependencies = [
-    "curses-menu==0.5.0",
-    "requests==2.11.1",
+    "curses-menu==0.6.7",
+    "requests==2.28.1",
     "alive-progress==2.4.1",
 ]
 
 setup(
     name="PyNews",
-    version="0.2.1",
+    version="0.2.2",
     description=description,
     long_description=long_description,
     long_description_content_type="text/x-rst",
