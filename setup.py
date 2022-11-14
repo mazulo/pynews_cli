@@ -11,7 +11,7 @@ author_email = 'pmazulo@gmail.com'
 dependencies = [
     'curses-menu==0.5.0',
     'requests==2.11.1',
-    'tqdm==3.8.0',
+    'alive-progress==2.4.1',
 ]
 
 setup(

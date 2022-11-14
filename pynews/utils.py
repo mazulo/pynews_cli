@@ -5,7 +5,7 @@ from concurrent.futures import as_completed, ThreadPoolExecutor
 import requests as req
 from cursesmenu import CursesMenu
 from cursesmenu.items import FunctionItem
-from tqdm import tqdm
+from alive_progress import alive_it
 from webbrowser import open as url_open
 
 from .constants import URLS
@@ -52,11 +52,7 @@ def create_list_stories(
             for new in list_id_stories[:number_of_stories]
         }
 
-        for future in tqdm(
-            as_completed(futures),
-            desc='Getting results',
-            unit=' news',
-        ):
+        for future in alive_it(as_completed(futures), total=len(futures), title='Getting news...', enrich_print=True, ctrl_c=True):
             list_stories.append(future.result())
 
     if shuffle:
