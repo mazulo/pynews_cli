@@ -5,9 +5,9 @@ from .constants import DEFAULT_THREADS_NUMBER
 
 def get_parser_options() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        prog='PyNews-CLI',
-        description='Your news collector inside your terminal! Tell me, what\'s\
-                          cooler than that?',
+        prog="PyNews-CLI",
+        description="Your news collector inside your terminal! Tell me, what's\
+                          cooler than that?",
         usage="""
             PyNews-CLI - News Collector from HackerNews API
             Usage: pynews [-t/--top-stories number_of_stories]
@@ -32,39 +32,39 @@ def get_parser_options() -> argparse.Namespace:
             """,
     )
     parser.add_argument(
-        '-t',
-        '--top-stories',
-        nargs='?',
+        "-t",
+        "--top-stories",
+        nargs="?",
         const=200,
         type=int,
-        help='Get the top N stories from HackerNews API'
+        help="Get the top N stories from HackerNews API",
     )
 
     parser.add_argument(
-        '-n',
-        '--news-stories',
-        nargs='?',
+        "-n",
+        "--news-stories",
+        nargs="?",
         const=200,
         type=int,
-        help='Get the N new stories from HackerNews API'
+        help="Get the N new stories from HackerNews API",
     )
 
     parser.add_argument(
-        '-s',
-        '--shuffle',
-        nargs='?',
+        "-s",
+        "--shuffle",
+        nargs="?",
         const=False,
         type=bool,
-        help='Get the N new stories from HackerNews API'
+        help="Get the N new stories from HackerNews API",
     )
 
     parser.add_argument(
-        '-T',
-        '--threads',
-        nargs='?',
+        "-T",
+        "--threads",
+        nargs="?",
         const=DEFAULT_THREADS_NUMBER,
         type=int,
-        help='Determine the number max of threads'
+        help="Determine the number max of threads",
     )
 
     options = parser.parse_args()
