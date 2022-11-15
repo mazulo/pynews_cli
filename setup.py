@@ -12,10 +12,11 @@ dependencies = [
     "requests==2.28.1",
     "alive-progress==2.4.1",
 ]
+__version__ = "0.2.2"
 
 setup(
     name="PyNews",
-    version="0.2.2",
+    version=__version__,
     description=description,
     long_description=long_description,
     long_description_content_type="text/x-rst",
