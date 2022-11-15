@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pynews"
-version = "0.2.2"
+version = "0.3.0"
 description = "PyNews is a simple Python CLI to browse news from HN website"
 license = {text = "GNU General Public License v3 (GPLv3)"}
 readme = "README.rst"
